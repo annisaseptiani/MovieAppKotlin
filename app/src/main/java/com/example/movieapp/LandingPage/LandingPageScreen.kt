@@ -1,38 +1,154 @@
 package com.example.movieapp.LandingPage
 
+import android.provider.Contacts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MovableContent
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.paging.CombinedLoadStates
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.movieapp.domain.model.PopularMovie
+import com.example.movieapp.ui.theme.MainColor
+import com.example.movieapp.ui.theme.MovieCard
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieList() {
-    PopularMovieList()
-    FavoritMovieList()
+fun LandingPageScreen(navHostController: NavHostController, viewModel: LandingPageViewModel) {
+
+    val lazyItems : LazyPagingItems<PopularMovie> = viewModel.paging.collectAsLazyPagingItems()
+
+    val favoriteMovies by viewModel.favoriteMovies.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(
+                text = "User",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            ) }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MainColor))
+        },
+        content = {
+            Column(modifier = Modifier.padding(it)) {
+                PopularMovieList(lazyItems)
+                FavoritMovieList(favoriteMovies)
+            }
+        }
+    )
+
 }
 
 @Composable
-fun PopularMovieList() {
+fun PopularMovieList(movies: LazyPagingItems<PopularMovie>) {
     Column {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Popular Movies", style = MaterialTheme.typography.titleLarge)
-            Text(text = "See All", style = MaterialTheme.typography.bodySmall, textDecoration = TextDecoration.Underline)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = "Popular Movies",
+                style = MaterialTheme.typography.titleMedium,
+                color = MainColor
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "See All",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MainColor
+                )
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = "next", tint = MainColor
+                )
+            }
         }
-
+        PopularMovieListItem(movies)
     }
 }
 
 @Composable
-fun FavoritMovieList() {
-    Column {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Favorite Movies", style = MaterialTheme.typography.titleLarge)
-            Text(text = "See All", style = MaterialTheme.typography.bodySmall, textDecoration = TextDecoration.Underline)
+fun PopularMovieListItem(movies: LazyPagingItems<PopularMovie>) {
+    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+
+        val limitedMovies = movies.itemSnapshotList.items.take(10)
+        items(limitedMovies.size) { index ->
+            val str =movies[index]
+            MovieCard(title = str!!.title, image = str.poster_path)
         }
     }
+}
+
+@Composable
+fun FavoriteMovieListItem(list: List<PopularMovie>) {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+
+        items(list.size) { index ->
+            val str =list[index]
+            MovieCard(title = str.title, image = str.poster_path)
+        }
+    }
+}
+
+@Composable
+fun FavoritMovieList(movies : List<PopularMovie>) {
+    Column {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = "Favorite Movies", style = MaterialTheme.typography.titleMedium,
+                color = MainColor)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "See All", style = MaterialTheme.typography.bodySmall, color = MainColor)
+                Icon(imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = "next", tint = MainColor)
+            }
+        }
+        FavoriteMovieListItem(list = movies)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun LandingPageScreenPreview() {
+
 }

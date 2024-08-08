@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -20,6 +21,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val apiKey: String = project.findProperty("API_KEY") as String
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -63,6 +71,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation (libs.androidx.paging.runtime.ktx)
     implementation (libs.paging.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
     implementation(libs.okhttp)
@@ -70,6 +79,12 @@ dependencies {
     implementation (libs.androidx.room.runtime)
     ksp (libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation ("androidx.paging:paging-rxjava3:3.0.0")
+    implementation ("io.reactivex.rxjava3:rxjava:3.0.0")
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation ("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.7.3")
+    implementation ("androidx.room:room-rxjava3:2.5.2")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
