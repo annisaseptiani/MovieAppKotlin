@@ -23,14 +23,14 @@ fun NavigationGraph(modifier: Modifier, navHostController: NavHostController,
         composable(Routes.Landing.routes) {
             LandingPageScreen(viewModel = landingPageViewModel, navHostController = navHostController)
         }
-        composable("${Routes.ListAll.routes}/{type}",
-            arguments = listOf(navArgument(name = "type") {
+        composable("${Routes.ListAll.routes}/{types}",
+            arguments = listOf(navArgument(name = "types") {
                 type = NavType.StringType
             })
         ) {
-            val movieId = it.arguments?.getString("type")
-            ListMovieScreen(type = "", listMovieViewModel = listMovieViewModel,
-                navHostController = navHostController)
+            val types = it.arguments?.getString("types")
+            ListMovieScreen(type = types!!, navHostController = navHostController,
+                viewModel = listMovieViewModel)
         }
         composable("${Routes.Detail.routes}/{id}",
             arguments = listOf(navArgument(name = "id") {

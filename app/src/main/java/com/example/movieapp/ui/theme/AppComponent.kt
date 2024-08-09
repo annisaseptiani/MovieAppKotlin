@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,9 +49,11 @@ import com.example.movieapp.domain.model.PopularMovie
 @Composable
 fun MovieCard(title: String, image: String, onClickItem : () -> Unit) {
 
-    Column(Modifier.padding(10.dp),verticalArrangement = Arrangement.Center) {
+    Column(Modifier.padding(10.dp),
+        verticalArrangement = Arrangement.Center) {
         AsyncImage(
-            modifier = Modifier.width(200.dp)
+            modifier = Modifier
+                .width(150.dp)
                 .clickable { onClickItem() },
             model = image,
             contentDescription = "Movie Image",
@@ -70,22 +73,26 @@ fun MovieCard(title: String, image: String, onClickItem : () -> Unit) {
 @Composable
 fun MovieCardLong(title:String, release: String,
                   poster: String, rating: String, onClickItem: () -> Unit) {
-    Card(colors = CardDefaults.cardColors(containerColor = Color.White),
+    Card(colors = CardDefaults.cardColors(containerColor = MainColor),
         border = BorderStroke(1.dp, MainColor), modifier = Modifier.padding(10.dp)
     ) {
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .clickable { onClickItem() }) {
-            AsyncImage(modifier = Modifier.width(100.dp), model = poster,
+                .clickable { onClickItem() },
+            verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(modifier = Modifier
+                .width(100.dp)
+                .padding(10.dp), model = poster,
                 contentDescription = "", contentScale = ContentScale.FillWidth)
-            Column {
-                Text(text = "title")
-                Text(text = "release date")
-                Text(text = "rating")
+            Column(Modifier.padding(20.dp)) {
+                Text(text = title, color = Color.White,
+                    fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                Text(text = release, color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium)
+                CustomLabel(labelText = "IMDB ${rating}", labelColor = MainColor)
             }
-
         }
     }
 }

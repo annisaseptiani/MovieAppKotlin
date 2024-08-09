@@ -1,6 +1,7 @@
 package com.example.movieapp.LandingPage
 
 import android.provider.Contacts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -90,7 +91,9 @@ fun PopularMovieList(navHostController: NavHostController, movies: LazyPagingIte
                 style = MaterialTheme.typography.titleMedium,
                 color = MainColor
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.clickable {
+                navHostController.navigate("${Routes.ListAll.routes}/popular")},
+                verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "See All",
                     style = MaterialTheme.typography.bodySmall,
@@ -145,13 +148,23 @@ fun FavoritMovieList(movies : List<PopularMovie>, navHostController: NavHostCont
                 .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Top 10 Favorite Movies", style = MaterialTheme.typography.titleMedium,
                 color = MainColor)
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.clickable {
+                navHostController.navigate("${Routes.ListAll.routes}/favorites")},
+                verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "See All", style = MaterialTheme.typography.bodySmall, color = MainColor)
                 Icon(imageVector = Icons.Default.KeyboardArrowRight,
                     contentDescription = "next", tint = MainColor)
             }
         }
-        FavoriteMovieListItem(list = movies, navHostController = navHostController)
+        if (movies.isEmpty()) {
+            Text(text = "No Favorite movie. \nClick on movie poster to add movie to favorite",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Gray, modifier = Modifier.fillMaxWidth().padding(10.dp),
+                textAlign = TextAlign.Center)
+        } else {
+            FavoriteMovieListItem(list = movies, navHostController = navHostController)
+        }
+
     }
 }
 
