@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.LandingPage.LandingPageViewModel
+import com.example.movieapp.ListAllMovie.ListMovieViewModel
+import com.example.movieapp.MovieDetail.MovieDetailViewModel
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.NavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +25,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val landingPageViewModel : LandingPageViewModel by viewModels()
+    private val detailViewModel : MovieDetailViewModel by viewModels()
+    private val listMovieViewModel : ListMovieViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,26 +35,20 @@ class MainActivity : ComponentActivity() {
                 val controller : NavHostController = rememberNavController()
                 Scaffold() {
                     paddingValues ->
-                    NavigationGraph(modifier = Modifier.padding(paddingValues), navHostController = controller,
-                        landingPageViewModel = landingPageViewModel )
+                    NavigationGraph(modifier = Modifier.padding(paddingValues),
+                        navHostController = controller,
+                        landingPageViewModel = landingPageViewModel,
+                        viewModel = detailViewModel,
+                        listMovieViewModel = listMovieViewModel)
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MovieAppTheme {
-        Greeting("Android")
-    }
+
 }

@@ -13,5 +13,5 @@ interface RemoteApi {
     fun getListPopular(@Query("page") page: Int) : Single<PopularMovieResponse>
 
     @GET("movie/{movieId}")
-    fun getDetailMovie(@Path("movieId") movieId : Long) : Single<DetailMovieResponse>
+    fun getDetailMovie(@Path("movieId") movieId : Int) : Single<DetailMovieResponse>
 }

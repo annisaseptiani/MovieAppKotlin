@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +45,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieapp.domain.model.PopularMovie
 import com.example.movieapp.ui.theme.MainColor
 import com.example.movieapp.ui.theme.MovieCard
+import com.example.movieapp.ui.theme.Routes
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +59,7 @@ fun LandingPageScreen(navHostController: NavHostController, viewModel: LandingPa
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(
-                text = "User",
+                text = "Movie App",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
@@ -64,9 +67,11 @@ fun LandingPageScreen(navHostController: NavHostController, viewModel: LandingPa
             ) }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MainColor))
         },
         content = {
-            Column(modifier = Modifier.padding(it)) {
-                PopularMovieList(lazyItems)
-                FavoritMovieList(favoriteMovies)
+            Column(modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())) {
+                PopularMovieList(navHostController,lazyItems)
+                FavoritMovieList(favoriteMovies, navHostController)
             }
         }
     )
@@ -74,14 +79,14 @@ fun LandingPageScreen(navHostController: NavHostController, viewModel: LandingPa
 }
 
 @Composable
-fun PopularMovieList(movies: LazyPagingItems<PopularMovie>) {
+fun PopularMovieList(navHostController: NavHostController, movies: LazyPagingItems<PopularMovie>) {
     Column {
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Popular Movies",
+            Text(text = "Top 10 Popular Movies",
                 style = MaterialTheme.typography.titleMedium,
                 color = MainColor
             )
@@ -97,44 +102,48 @@ fun PopularMovieList(movies: LazyPagingItems<PopularMovie>) {
                 )
             }
         }
-        PopularMovieListItem(movies)
+        PopularMovieListItem(navHostController,movies)
     }
 }
 
 @Composable
-fun PopularMovieListItem(movies: LazyPagingItems<PopularMovie>) {
+fun PopularMovieListItem(navHostController: NavHostController, movies: LazyPagingItems<PopularMovie>) {
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
 
         val limitedMovies = movies.itemSnapshotList.items.take(10)
         items(limitedMovies.size) { index ->
             val str =movies[index]
-            MovieCard(title = str!!.title, image = str.poster_path)
+            MovieCard(title = str!!.title, image = str.poster_path, onClickItem = {
+                navHostController.navigate("${Routes.Detail.routes}/${str.id}")
+            })
         }
     }
 }
 
 @Composable
-fun FavoriteMovieListItem(list: List<PopularMovie>) {
+fun FavoriteMovieListItem(list: List<PopularMovie>, navHostController: NavHostController) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
 
         items(list.size) { index ->
             val str =list[index]
-            MovieCard(title = str.title, image = str.poster_path)
+            MovieCard(title = str.title, image = str.poster_path, onClickItem = {
+                navHostController.navigate("${Routes.Detail.routes}/${str.id}")
+            })
         }
     }
 }
 
 @Composable
-fun FavoritMovieList(movies : List<PopularMovie>) {
+fun FavoritMovieList(movies : List<PopularMovie>, navHostController: NavHostController) {
     Column {
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Favorite Movies", style = MaterialTheme.typography.titleMedium,
+            Text(text = "Top 10 Favorite Movies", style = MaterialTheme.typography.titleMedium,
                 color = MainColor)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "See All", style = MaterialTheme.typography.bodySmall, color = MainColor)
@@ -142,7 +151,7 @@ fun FavoritMovieList(movies : List<PopularMovie>) {
                     contentDescription = "next", tint = MainColor)
             }
         }
-        FavoriteMovieListItem(list = movies)
+        FavoriteMovieListItem(list = movies, navHostController = navHostController)
     }
 }
 
