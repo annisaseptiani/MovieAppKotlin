@@ -1,6 +1,6 @@
 package com.example.movieapp.domain.model
 
-open class PopularMovie(
+public open class PopularMovie(
     open val id :Int,
     open val title: String,
     open val vote_average : Double,

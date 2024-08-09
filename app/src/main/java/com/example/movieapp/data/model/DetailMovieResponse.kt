@@ -1,6 +1,6 @@
 package com.example.movieapp.data.model
 
-data class DetailMovieResponse(
+public data class DetailMovieResponse(
     val adult: Boolean,
     val backdrop_path: String,
     val belongs_to_collection: Any,
