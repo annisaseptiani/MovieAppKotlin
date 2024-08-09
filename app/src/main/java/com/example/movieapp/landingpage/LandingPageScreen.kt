@@ -1,6 +1,5 @@
-package com.example.movieapp.LandingPage
+package com.example.movieapp.landingpage
 
-import android.provider.Contacts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,33 +20,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MovableContent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.CombinedLoadStates
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieapp.domain.model.PopularMovie
 import com.example.movieapp.ui.theme.MainColor
 import com.example.movieapp.ui.theme.MovieCard
 import com.example.movieapp.ui.theme.Routes
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

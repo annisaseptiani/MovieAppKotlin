@@ -7,12 +7,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.movieapp.LandingPage.LandingPageScreen
-import com.example.movieapp.LandingPage.LandingPageViewModel
-import com.example.movieapp.ListAllMovie.ListMovieScreen
-import com.example.movieapp.ListAllMovie.ListMovieViewModel
-import com.example.movieapp.MovieDetail.MovieDetail
-import com.example.movieapp.MovieDetail.MovieDetailViewModel
+import com.example.movieapp.landingpage.LandingPageScreen
+import com.example.movieapp.landingpage.LandingPageViewModel
+import com.example.movieapp.listallmovie.ListMovieScreen
+import com.example.movieapp.listallmovie.ListMovieViewModel
+import com.example.movieapp.moviedetail.MovieDetail
+import com.example.movieapp.moviedetail.MovieDetailViewModel
 
 @Composable
 fun NavigationGraph(modifier: Modifier, navHostController: NavHostController,

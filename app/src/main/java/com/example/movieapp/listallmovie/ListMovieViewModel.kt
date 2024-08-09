@@ -1,4 +1,4 @@
-package com.example.movieapp.LandingPage
+package com.example.movieapp.listallmovie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,8 +18,9 @@ import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class LandingPageViewModel @Inject constructor(private val
-repository : ListMovieRepository) : ViewModel() {
+class ListMovieViewModel @Inject constructor(
+    private val repository: ListMovieRepository
+): ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val pagingFlow : Flowable<PagingData<PopularMovie>> = repository.getAllData()

@@ -1,4 +1,4 @@
-package com.example.movieapp.ListAllMovie
+package com.example.movieapp.listallmovie
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
